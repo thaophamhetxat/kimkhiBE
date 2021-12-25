@@ -84,4 +84,12 @@ public class UserPrinciple implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

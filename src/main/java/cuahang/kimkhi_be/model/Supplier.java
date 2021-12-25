@@ -7,10 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Entity
 public class Supplier {
     @Id
@@ -20,4 +17,45 @@ public class Supplier {
     String provider;  //tên người cung cấp
     String phone;
 
+    public Supplier() {
+    }
+
+    public Supplier(long id, String nameSupplier, String provider, String phone) {
+        this.id = id;
+        this.nameSupplier = nameSupplier;
+        this.provider = provider;
+        this.phone = phone;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getNameSupplier() {
+        return nameSupplier;
+    }
+
+    public void setNameSupplier(String nameSupplier) {
+        this.nameSupplier = nameSupplier;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

@@ -1,11 +1,15 @@
 package cuahang.kimkhi_be.controller;
 
+import cuahang.kimkhi_be.dto.response.ResponseMessage;
 import cuahang.kimkhi_be.model.Cart;
 import cuahang.kimkhi_be.model.Product;
 import cuahang.kimkhi_be.service.impl.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,36 +25,40 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
-////phân trang
-//    @GetMapping("/shop")
-//    public ResponseEntity<List<Product>> getAllVaccine(@RequestParam long index) {
-//        Optional<Product> product = iProductService.getProductById(index);
-//        if (product.isPresent()) {
-//            return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity(product, HttpStatus.OK);
-//    }
-
-    @GetMapping("/page1")
-    public ResponseEntity<Page<Product>> products1(@RequestParam(defaultValue = "0") int page) {
-        return new ResponseEntity<>(iProductService.findAll(PageRequest.of(page, 3)), HttpStatus.OK);
+    //Xắp xếp theo tên,phân trang
+    @GetMapping("/page")
+    public ResponseEntity<?> pageProduct(@PageableDefault(sort = "nameProduct", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Product> productPage = iProductService.findAll(pageable);
+        if (productPage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(productPage, HttpStatus.OK);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/shop")
     public ResponseEntity<List<Product>> products(@RequestParam int index) {
         List<Product> products = iProductService.getAllProduct(index);
         if (products.isEmpty()) {
-            return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<Product>>(products,HttpStatus.OK);
-
-        //        return new ResponseEntity<>(iProductService.findAll(PageRequest.of(page, 3)), HttpStatus.OK);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @PostMapping
-    public ResponseEntity<Product> add(@RequestBody Product product) {
-        return ResponseEntity.ok(iProductService.addProduct(product));
+    public ResponseEntity<?> add(@RequestBody Product product) {
+        //xét trừng lặp => return về message
+        if (iProductService.existsByNameProduct(product.getNameProduct())) {
+            return new ResponseEntity<>(new ResponseMessage("no_name_product"), HttpStatus.OK);
+        }
+        //avata null
+        if (product.getImage() == null) {
+            return new ResponseEntity<>(new ResponseMessage("no_image"), HttpStatus.OK);
+        }
+        iProductService.addProduct(product);
+        return new ResponseEntity<>(new ResponseMessage("add_success"), HttpStatus.OK);
     }
 
+    //lấy tất cả sản phẩm không phân trang
     @GetMapping
     public ResponseEntity<?> get() {
         return ResponseEntity.ok(iProductService.getProductByAll());
@@ -77,7 +85,6 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/add/{id}")
     public ResponseEntity<Product> addToCart(@PathVariable Long id, @ModelAttribute Cart cart) {
         Optional<Product> productOptional = iProductService.getProductById(id);
@@ -89,8 +96,6 @@ public class ProductController {
 //            return new ResponseEntity<>(HttpStatus.OK);
 ////            return "redirect:/shopping-cart";
 //        }
-
-
 
 
 //        cart.addProduct(productOptional.get());

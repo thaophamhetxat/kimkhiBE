@@ -9,15 +9,16 @@ public class JwtResponse {
     private String type = "Bearer";
     private String name;
     private Collection<? extends GrantedAuthority> roles;
-
+private String avatar;
     public JwtResponse() {
     }
 
-    public JwtResponse(String token, String type, String name, Collection<? extends GrantedAuthority> roles) {
+    public JwtResponse(String token, String type, String name, Collection<? extends GrantedAuthority> roles, String avatar) {
         this.token = token;
         this.type = type;
         this.name = name;
         this.roles = roles;
+        this.avatar = avatar;
     }
 
     public JwtResponse(String token, String name, Collection<? extends GrantedAuthority> authorities) {
@@ -56,5 +57,13 @@ public class JwtResponse {
 
     public void setRoles(Collection<? extends GrantedAuthority> roles) {
         this.roles = roles;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

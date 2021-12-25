@@ -1,7 +1,6 @@
 package cuahang.kimkhi_be.model;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -28,7 +27,7 @@ public class Users {
     @Size(min = 3, max = 50)
     private String name;
     @NotBlank
-    @Size(min = 3,max = 50)
+    @Size(min = 3, max = 50)
     private String username;
     @NotBlank
     @Size(max = 50)
@@ -36,7 +35,7 @@ public class Users {
     private String email;
     @JsonIgnore
     @NotBlank
-    @Size(min = 6,max = 100)
+    @Size(min = 6, max = 100)
     private String password;
     @Lob
     private String avatar;
@@ -57,18 +56,17 @@ public class Users {
         this.roles = roles;
     }
 
-    public Users(   @NotBlank
-                    @Size(min = 3, max = 50) String name,
-                    @NotBlank
-                    @Size(min = 3,max = 50) String username,
-                    @Size(max = 50)
-                    @Email String email,
-                    @NotBlank
-                    @Size(min = 6,max = 100)String encode) {
+    public Users(@NotBlank @Size(min = 3, max = 50) String name,
+                 @NotBlank @Size(min = 3, max = 50) String username,
+                 @NotBlank @Size(max = 50) @Email String email,
+                 String avatar,
+                 @NotBlank @Size(min = 6, max = 100) String encode) {
         this.name = name;
         this.username = username;
         this.email = email;
+        this.avatar = avatar;
         this.password = encode;
+
     }
 
     public Long getId() {

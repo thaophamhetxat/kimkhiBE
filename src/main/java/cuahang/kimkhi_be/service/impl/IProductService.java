@@ -8,7 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProductService {
+    //phân trang
     public Page<Product> findAll(Pageable pageable);
+
+    //xét trùng lặp
+    boolean existsByNameProduct(String nameProduct);
+
     public Page<Product> findByNameProductContaining(String nameProduct,Pageable pageable);
 
     public Product addProduct(Product product);

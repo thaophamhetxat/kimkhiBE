@@ -1,7 +1,9 @@
 package cuahang.kimkhi_be.service;
 
 import cuahang.kimkhi_be.model.Supplier;
+import cuahang.kimkhi_be.model.Users;
 import cuahang.kimkhi_be.repository.ISupplierRepo;
+import cuahang.kimkhi_be.security.userpincal.UserDetailService;
 import cuahang.kimkhi_be.service.impl.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class SupplierService implements ISupplierService {
     @Autowired
     ISupplierRepo iSupplierRepo;
+
+    @Autowired
+    UserDetailService userDetailService;
 
     @Override
     public Supplier addSupplier(Supplier supplier) {

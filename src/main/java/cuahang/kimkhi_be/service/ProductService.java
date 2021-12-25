@@ -1,7 +1,9 @@
 package cuahang.kimkhi_be.service;
 
 import cuahang.kimkhi_be.model.Product;
+import cuahang.kimkhi_be.model.Users;
 import cuahang.kimkhi_be.repository.IProductRepo;
+import cuahang.kimkhi_be.security.userpincal.UserDetailService;
 import cuahang.kimkhi_be.service.impl.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,9 @@ public class ProductService implements IProductService {
     @Autowired
     IProductRepo iProductRepo;
 
+    //tiêm user hiện tại để set vào
+    @Autowired
+    UserDetailService userDetailService;
 
     @Override
     public Page<Product> findAll(Pageable pageable) {
@@ -24,12 +29,19 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public boolean existsByNameProduct(String nameProduct) {
+        return iProductRepo.existsByNameProduct(nameProduct);
+    }
+
+    @Override
     public Page<Product> findByNameProductContaining(String nameProduct, Pageable pageable) {
-        return iProductRepo.findByNameProductContaining(nameProduct,pageable);
+        return iProductRepo.findByNameProductContaining(nameProduct, pageable);
     }
 
     @Override
     public Product addProduct(Product product) {
+        Users users = userDetailService.getCurrentUser();
+        product.setUsers(users);
         return iProductRepo.save(product);
     }
 
